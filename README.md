@@ -127,102 +127,12 @@ LIVE_LINK : https://task-manager-seven-swart-84.vercel.app/login
 
 🏗️ Folder Structure
 Task-Manager/
-backend/
-├── config/
-│   └── db.js                    # MongoDB connection configuration
-├── controllers/
-│   ├── authController.js        # Authentication logic (login, signup)
-│   ├── reportController.js      # Report generation (Excel exports)
-│   ├── taskController.js        # Task CRUD operations
-│   └── userController.js        # User management operations
-├── middlewares/
-│   ├── authMiddleware.js        # JWT authentication middleware
-│   └── uploadMiddleware.js      # Multer file upload configuration
-├── models/
-│   ├── Task.js                  # Task schema (title, status, priority, etc.)
-│   └── User.js                  # User schema (name, email, role, etc.)
-├── routes/
-│   ├── authRoutes.js            # Auth endpoints (/login, /signup)
-│   ├── reportRoutes.js          # Report endpoints
-│   ├── taskRoutes.js            # Task CRUD endpoints
-│   └── userRoutes.js            # User management endpoints
-├── uploads/                     # Temporary file storage (before Cloudinary)
-├── utils/
-│   └── cloudinary.js            # Cloudinary configuration
-├── .env                         # Environment variables
-├── package.json                 # Backend dependencies
-└── server.js                    # Express server entry point
+<img width="750" height="624" alt="image" src="https://github.com/user-attachments/assets/fc1521aa-19ac-4b83-b073-a98bb33b8c74" />
+
+
 
 frontend/Task-Manager/
-├── public/
-│   └── images/                  # Static images
-├── src/
-│   ├── assets/                  # Static assets
-│   ├── components/
-│   │   ├── Cards/
-│   │   │   ├── InfoCard.jsx           # Dashboard info cards
-│   │   │   ├── TaskCard.jsx           # Task display card
-│   │   │   ├── UpdateUserModal.jsx    # User update modal
-│   │   │   ├── UserCard.jsx           # User display card
-│   │   │   └── UserPerformanceCard.jsx
-│   │   ├── Charts/
-│   │   │   ├── CustomBarChart.jsx
-│   │   │   ├── CustomLegend.jsx
-│   │   │   ├── CustomLineChart.jsx
-│   │   │   ├── CustomPieChart.jsx
-│   │   │   └── CustomTooltip.jsx
-│   │   ├── inputs/
-│   │   │   ├── AddAttachmentsInput.jsx
-│   │   │   ├── Input.jsx
-│   │   │   ├── ProfilePhotoSelector.jsx
-│   │   │   ├── SelectDropdown.jsx
-│   │   │   ├── SelectUsers.jsx
-│   │   │   └── TodoListInput.jsx
-│   │   ├── layouts/
-│   │   │   ├── AuthLayout.jsx
-│   │   │   ├── DashboardLayout.jsx
-│   │   │   ├── DeleteAlert.jsx
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Progress.jsx
-│   │   │   ├── SideMenu.jsx
-│   │   │   └── TaskListTable.jsx
-│   │   ├── AvatarGroup.jsx
-│   │   ├── Modal.jsx
-│   │   ├── TaskListTable.jsx
-│   │   └── TaskStatusTabs.jsx
-│   ├── context/
-│   │   └── userContext.jsx      # Global user state management
-│   ├── hooks/
-│   │   └── useUserAuth.jsx      # Authentication hook
-│   ├── pages/
-│   │   ├── Admin/
-│   │   │   ├── AdminDetails.jsx
-│   │   │   ├── CreateTask.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── ManageAdmins.jsx
-│   │   │   ├── ManageTasks.jsx
-│   │   │   ├── ManageUsers.jsx
-│   │   │   ├── ManagerDashboard.jsx
-│   │   │   └── UserDetails.jsx
-│   │   ├── Auth/
-│   │   │   ├── Login.jsx
-│   │   │   └── SignUp.jsx
-│   │   └── User/
-│   │       ├── MyTasks.jsx
-│   │       ├── UserDashboard.jsx
-│   │       ├── UserProfile.jsx
-│   │       └── ViewTaskDetails.jsx
-│   ├── routes/
-│   │   └── PrivateRoute.jsx     # Route protection component
-│   ├── utils/                   # Utility functions
-│   ├── App.jsx                  # Main app component with routing
-│   ├── index.css                # Tailwind CSS and global styles
-│   └── main.jsx                 # React entry point
-├── .eslintrc.config.js
-├── index.html
-├── package.json
-├── tailwind.config.js
-└── vite.config.js
+<img width="356" height="824" alt="image" src="https://github.com/user-attachments/assets/18b4df0b-651c-42e1-8258-d872654e8575" />
 
 
 
