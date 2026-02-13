@@ -193,9 +193,14 @@ const CreateTask = () => {
       if (response.data) {
         const taskInfo = response.data;
 
-        // Permission Check: Only Manager or Creator can View/Edit
-        if (user?.role !== "manager" && taskInfo.createdBy?.toString() !== user?._id?.toString()) {
-          toast.error("Access denied. You can only edit tasks you created.");
+        // Permission Check: Only Manager or Creator can View/Edit in this page
+        // Assigned users should use 'Task Details' page, not this 'Create/Edit Task' page.
+
+        const isManager = user?.role === "manager";
+        const isCreator = taskInfo.createdBy?.toString() === user?._id?.toString();
+
+        if (!isManager && !isCreator) {
+          toast.error("Access denied. Only the Task Creator or Manager can edit this task.");
           navigate('/admin/tasks');
           return;
         }

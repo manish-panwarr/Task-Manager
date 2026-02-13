@@ -39,6 +39,11 @@ const getTasks = async (req, res) => {
             filter.createdBy = req.user._id;
         }
 
+        // Filter by Assigned To Me (New feature for Admins/Managers to see their own assigned tasks)
+        if (req.query.assignedToMe === "true") {
+            filter.assignedTo = req.user._id;
+        }
+
 
         let tasks;
 
@@ -314,8 +319,9 @@ const updateTask = async (req, res) => {
         if (!task) return res.status(404).json({ message: "Task not found" });
 
         // Check if user is Manager OR Creator
+        // Admin can only edit if they are the creator (or if they are a manager)
         if (req.user.role !== "manager" && task.createdBy.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: "Access denied. Only the Task Creator or a Manager can edit this task." });
+            return res.status(403).json({ message: "Access denied. Only the Task Creator or Manager can edit this task." });
         }
 
         task.title = req.body.title || task.title;
@@ -453,7 +459,9 @@ const updateTaskStatus = async (req, res) => {
         // console.log("Req User ID:", req.user._id);
         const isAssigned = task.assignedTo.some((id) => id.toString() === req.user._id.toString());
 
-        if (!isAssigned && req.user.role !== "admin" && req.user.role !== "manager") {
+        const isCreator = task.createdBy.toString() === req.user._id.toString();
+
+        if (!isAssigned && !isCreator && req.user.role !== "manager") {
             return res.status(403).json({ message: "Not authorized to update this task" });
         }
 
@@ -527,7 +535,7 @@ const deleteTask = async (req, res) => {
 
         // Check if user is Manager OR Creator
         if (req.user.role !== "manager" && task.createdBy.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: "Access denied. Only the Task Creator or a Manager can delete this task." });
+            return res.status(403).json({ message: "Access denied. Only the Task Creator or Manager can delete this task." });
         }
 
         await task.deleteOne();
@@ -547,7 +555,10 @@ const updateTaskChecklist = async (req, res) => {
         const task = await Task.findById(req.params.id);
         if (!task) return res.status(404).json({ message: "Task not found" });
 
-        if (!task.assignedTo.includes(req.user._id) && req.user.role !== "admin" && req.user.role !== "manager") {
+        const isAssigned = task.assignedTo.includes(req.user._id);
+        const isCreator = task.createdBy.toString() === req.user._id.toString();
+
+        if (!isAssigned && !isCreator && req.user.role !== "manager") {
             return res.status(403).json({ message: "Not authorized to update this task" });
         }
 

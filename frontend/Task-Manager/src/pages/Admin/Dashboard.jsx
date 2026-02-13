@@ -152,6 +152,15 @@ const Dashboard = () => {
         </div>
       </div>
 
+      <div className="flex justify-end mb-4">
+        <button
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
+          onClick={() => navigate("/admin/tasks", { state: { filterOwner: "assigned_to_me" } })}
+        >
+          My Tasks <LuArrowRight />
+        </button>
+      </div>
+
       <div className="grid md:grid-cols-2 gap-6 my-6">
         <div className="card">
           <h5 className="font-medium mb-3">Task Distribution</h5>

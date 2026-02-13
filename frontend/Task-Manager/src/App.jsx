@@ -55,8 +55,8 @@ const App = () => {
               <Route path="/admin/admins/:id" element={<AdminDetails />} />
             </Route>
 
-            {/*User Routes */}
-            <Route element={<PrivateRoute allowedRoles={['user', 'member']} />}>
+            {/*User Routes - Shared with Admin/Manager for View details */}
+            <Route element={<PrivateRoute allowedRoles={['user', 'member', 'admin', 'manager']} />}>
               <Route path="/user/dashboard" element={<UserDashboard />} />
               <Route path="/user/tasks" element={<MyTasks />} />
               <Route path="/user/profile" element={<UserProfile />} />
@@ -72,6 +72,7 @@ const App = () => {
 
 
       <Toaster
+        position="top-right"
         toastOptions={{
           className: "",
           style: {

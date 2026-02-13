@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../components/layouts/DashboardLayout'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { API_PATHS } from '../../utils/apiPaths';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
@@ -14,15 +14,19 @@ import { UserContext } from '../../context/userContext';
 
 const ManageTasks = () => {
 
+  const navigate = useNavigate();
+  const location = useLocation(); // Import useLocation if not already
+  const { user } = useContext(UserContext); // Get current user
+
+  // Check for initial filter from navigation state
+  const initialFilterOwner = location.state?.filterOwner || "All";
+
   const [allTasks, setAllTasks] = useState([]);
   const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDepartment, setFilterDepartment] = useState("");
-  const [filterOwner, setFilterOwner] = useState("All"); // New state
-
-  const navigate = useNavigate();
-  const { user } = useContext(UserContext); // Get current user
+  const [filterOwner, setFilterOwner] = useState(initialFilterOwner); // Initialize with state or default "All"
 
   const getAllTasks = async () => {
     try {
@@ -31,7 +35,8 @@ const ManageTasks = () => {
           status: filterStatus === "All" ? "" : filterStatus,
           department: filterDepartment,
           search: searchQuery,
-          createdByMe: filterOwner === "true" ? "true" : "", // Pass parameter
+          createdByMe: filterOwner === "created_by_me" ? "true" : "", // Pass parameter
+          assignedToMe: filterOwner === "assigned_to_me" ? "true" : "", // Pass parameter
         },
       });
 
@@ -56,19 +61,44 @@ const ManageTasks = () => {
     }
   };
 
-
   const handleClick = (taskData) => {
     // Permission Check: Only Manager or Creator can edit
     // taskData.createdBy might be an object (if populated) or string. Safe check:
-    // Actually getTasks (admin) usually doesn't populate createdBy, so it's an ID string/object.
     const creatorId = typeof taskData.createdBy === 'object' ? taskData.createdBy._id : taskData.createdBy;
 
-    if (user?.role !== "manager" && creatorId?.toString() !== user?._id?.toString()) {
-      toast.error("Access denied. You can only edit tasks you created.");
+    // Check if user is Manager, Creator, Admin, or Assigned
+    const isAssigned = taskData.assignedTo?.some(u =>
+      (u._id?.toString() || u?.toString()) === user?._id?.toString()
+    );
+
+    const isManager = user?.role === "manager";
+    const isCreator = creatorId?.toString() === user?._id?.toString();
+
+    // If Assigned (regardless of role), go to View Task (to complete/checklist)
+    // Priority: If assigned, they likely want to work on it. 
+    // BUT if they are ALSO the creator, they might want to EDIT. 
+    // Usually, clicking the card body goes to View. Edit button (if we had one) goes to Edit.
+    // Here we only have one click action.
+    // Let's say: If Creator OR Manager -> Edit. 
+    // If Assigned AND NOT Creator/Manager -> View.
+    // Wait, if I am Admin and Created it, I want to Edit.
+    // If I am Admin and Assigned (by someone else), I want to View/Work.
+
+    if (isManager || isCreator) {
+      navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
       return;
     }
-    navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+
+    if (isAssigned) {
+      navigate(`/user/task-details/${taskData._id}`);
+      return;
+    }
+
+    // Access Denied
+    toast.error("Access denied. You can only edit tasks you created or are assigned to.");
   };
+  // ... (rest of code) ...
+
 
   // download task report
   const handleDownloadReport = async () => {
@@ -124,7 +154,8 @@ const ManageTasks = () => {
               <SelectDropdown
                 options={[
                   { label: "All Tasks", value: "All" },
-                  { label: "My Tasks", value: "true" },
+                  { label: "Assigned to Me", value: "assigned_to_me" },
+                  { label: "Created by Me", value: "created_by_me" },
                 ]}
                 value={filterOwner}
                 onChange={(value) => setFilterOwner(value)}
