@@ -1,4 +1,4 @@
-📋 Project Description
+#📋 Project Description
 
 A comprehensive **Task Management System** built with the **MERN stack** that enables organizations to efficiently manage tasks, track user performance, and monitor project progress.
 
@@ -126,6 +126,9 @@ LIVE_LINK : https://task-manager-seven-swart-84.vercel.app/login
 
 
 🏗️ Folder Structure
+📦 Project Root
+ ├── 📁 frontend
+ └── 📁 backend
 
 Task-Manager/
 backend/
