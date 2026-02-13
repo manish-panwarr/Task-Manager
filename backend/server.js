@@ -14,6 +14,7 @@ const app = express();
 // Middleware to handle CORS
 const allowedOrigins = [
     "http://localhost:5173",
+    "https://task-manager-seven-swart-84.vercel.app",
     process.env.CLIENT_URL
 ];
 
