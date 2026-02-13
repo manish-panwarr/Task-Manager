@@ -12,9 +12,20 @@ const reportRoutes = require("./routes/reportRoutes");
 const app = express();
 
 // Middleware to handle CORS
+const allowedOrigins = [
+    "http://localhost:5173",
+    process.env.CLIENT_URL
+];
+
 app.use(
     cors({
-        origin: true, // Allow all origins with credentials
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true
